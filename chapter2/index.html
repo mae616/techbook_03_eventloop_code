@@ -82,7 +82,7 @@ console.log('[sync] fetch登録後');
 <h2>コード 2.4.2: HTTPエラーの観察</h2>
 <script>
 console.log('[fetch-start] HTTPエラーのテスト');
-fetch('https://httpstat.us/404')
+fetch('https://jsonplaceholder.typicode.com/posts/9999')
   .then((response) => {
     console.log('[fetch-resolve] ステータス:', response.status, '成功?', response.ok);
   })
