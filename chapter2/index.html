@@ -15,8 +15,17 @@ setTimeout(() => {
   console.log('[3] タイマーのコールバック');
 }, 0);
 const start = Date.now();
-while (Date.now() - start < 1000) {}
+while (Date.now() - start < 1000) {
+  // 1秒間、何もしない（同期的にブロック）
+}
 console.log('[2] ループ終了');
+</script>
+
+<h2>コード 2.1.2: 同期と非同期の最小ペア</h2>
+<script>
+console.log('[sync] 先');
+setTimeout(() => console.log('[task] あと'), 0);
+console.log('[sync] 先2');
 </script>
 
 <h2>コード 2.2.1: timer と fetch の共通パターン</h2>

@@ -34,12 +34,13 @@ function outer() {
   const b = '外側';
   function middle() {
     const c = '中間';
-    function innerFn() {
+    function inner() {
       console.log('[inner] a =', a);
       console.log('[inner] b =', b);
       console.log('[inner] c =', c);
     }
-    innerFn();
+
+    inner();
   }
   middle();
 }
@@ -109,7 +110,7 @@ for (var i = 0; i < 3; i++) {
 for (let i = 0; i < 3; i++) {
   setTimeout(() => {
     console.log('[let] i =', i);
-  }, 200);
+  }, 100);
 }
 </script>
 </body>
