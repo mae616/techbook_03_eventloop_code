@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第2章 なぜ「書いた順」と「動いた順」がちがうのか</title>
+</head>
+<body>
+<h1>第2章 なぜ「書いた順」と「動いた順」がちがうのか</h1>
+<p>⚠ fetch を使うコードはローカルサーバー経由で開いてください。</p>
+
+<h2>コード 2.1.1: 同期ブロックとタイマーの組み合わせ</h2>
+<script>
+console.log('[1] ループ開始');
+setTimeout(() => {
+  console.log('[3] タイマーのコールバック');
+}, 0);
+const start = Date.now();
+while (Date.now() - start < 1000) {}
+console.log('[2] ループ終了');
+</script>
+
+<h2>コード 2.2.1: timer と fetch の共通パターン</h2>
+<script>
+// [A] タイマー系
+console.log('[A-start] タイマー登録');
+setTimeout(() => {
+  console.log('[A-done] タイマー完了');
+}, 1000);
+
+// [B] ネットワーク系
+console.log('[B-start] fetch開始');
+fetch('../sample.gif')
+  .then((response) => {
+    console.log('[B-done] fetch完了', response.status);
+  });
+
+console.log('[sync] 全部登録した');
+</script>
+
+<h2>コード 2.3.1: ラベルなしのログ</h2>
+<script>
+console.log('開始');
+fetch('../sample.gif')
+  .then((response) => {
+    console.log('完了', response.status);
+  });
+console.log('次の処理');
+</script>
+
+<h2>コード 2.3.2: ラベル付きのログ</h2>
+<script>
+console.log('[fetch-start] 画像の取得を開始');
+fetch('../sample.gif')
+  .then((response) => {
+    console.log('[fetch-resolve] 取得完了', response.status);
+  });
+console.log('[sync] fetch登録後の同期処理');
+</script>
+
+<h2>コード 2.4.1: 通信エラーの観察</h2>
+<script>
+console.log('[fetch-start] 通信エラーのテスト');
+fetch('https://this-does-not-exist.invalid/')
+  .then((response) => {
+    console.log('[fetch-resolve] ここには来ない');
+  })
+  .catch((error) => {
+    console.log('[fetch-error] 通信エラー:', error.message);
+  });
+console.log('[sync] fetch登録後');
+</script>
+
+<h2>コード 2.4.2: HTTPエラーの観察</h2>
+<script>
+console.log('[fetch-start] HTTPエラーのテスト');
+fetch('https://httpstat.us/404')
+  .then((response) => {
+    console.log('[fetch-resolve] ステータス:', response.status, '成功?', response.ok);
+  })
+  .catch((error) => {
+    console.log('[fetch-error] ここには来ない');
+  });
+console.log('[sync] fetch登録後');
+</script>
+</body>
+</html>

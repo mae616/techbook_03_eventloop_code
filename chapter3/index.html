@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第3章 関数を呼んだ瞬間、エンジン内部に何が積まれるか</title>
+</head>
+<body>
+<h1>第3章 関数を呼んだ瞬間、エンジン内部に何が積まれるか</h1>
+
+<h2>コード 3.1.1: function宣言とconst関数式の呼べるタイミング</h2>
+<script>
+console.log('[1]', greet('太郎'));
+function greet(name) {
+  return 'こんにちは、' + name;
+}
+try {
+  console.log('[2]', hello('花子'));
+} catch (e) {
+  console.log('[2] エラー:', e.message);
+}
+const hello = (name) => 'やあ、' + name;
+console.log('[3]', hello('花子'));
+</script>
+
+<h2>コード 3.2.1: 3段ネストとconsole.trace</h2>
+<script>
+function fnA() {
+  console.log('[fnA] 開始');
+  fnB();
+  console.log('[fnA] 終了');
+}
+function fnB() {
+  console.log('[fnB] 開始');
+  fnC();
+  console.log('[fnB] 終了');
+}
+function fnC() {
+  console.log('[fnC] 実行中');
+  console.trace('[fnC] スタックの状態');
+}
+fnA();
+</script>
+
+<h2>コード 3.3.1: var と let の hoisting の違い</h2>
+<script>
+console.log('[var]', a);
+var a = 10;
+try {
+  console.log('[let]', b);
+} catch (e) {
+  console.log('[let] エラー:', e.message);
+}
+let b = 20;
+</script>
+
+<h2>コード 3.3.2: TDZ を踏む例と踏まない例</h2>
+<script>
+function test1() {
+  console.log(x);
+  let x = 5;
+}
+function test2() {
+  let x = 5;
+  console.log(x);
+}
+try {
+  test1();
+} catch (e) {
+  console.log('test1:', e.message);
+}
+test2();
+</script>
+
+<h2>コード 3.4.1: 同期と非同期のconsole.trace比較</h2>
+<script>
+function syncWork() {
+  console.trace('[sync] スタックの状態');
+}
+console.log('--- 同期呼び出し ---');
+syncWork();
+console.log('--- 非同期コールバック ---');
+setTimeout(() => {
+  console.trace('[async] スタックの状態');
+}, 0);
+</script>
+</body>
+</html>

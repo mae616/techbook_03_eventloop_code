@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>第5章 どの変数が「見える」か、どこまで生き残るか</title>
+</head>
+<body>
+<h1>第5章 どの変数が「見える」か、どこまで生き残るか</h1>
+
+<h2>コード 5.1.1: 内側関数が外側の変数を読む</h2>
+<script>
+const greeting = 'こんにちは';
+function sayHello(name) {
+  console.log(greeting + '、' + name);
+}
+sayHello('太郎');
+</script>
+
+<h2>コード 5.1.2: シャドウイング</h2>
+<script>
+const value = '外側';
+function inner() {
+  const value = '内側';
+  console.log(value);
+}
+inner();
+console.log(value);
+</script>
+
+<h2>コード 5.2.1: 3層ネストの参照</h2>
+<script>
+const a = '最も外側';
+function outer() {
+  const b = '外側';
+  function middle() {
+    const c = '中間';
+    function innerFn() {
+      console.log('[inner] a =', a);
+      console.log('[inner] b =', b);
+      console.log('[inner] c =', c);
+    }
+    innerFn();
+  }
+  middle();
+}
+outer();
+</script>
+
+<h2>コード 5.2.2: 存在しない変数への参照</h2>
+<script>
+function test() {
+  console.log(notDefined);
+}
+try {
+  test();
+} catch (e) {
+  console.log('エラー:', e.message);
+}
+</script>
+
+<h2>コード 5.3.1: カウンターファクトリ</h2>
+<script>
+function createCounter() {
+  let count = 0;
+  return function increment() {
+    count++;
+    console.log('count =', count);
+  };
+}
+const counterA = createCounter();
+const counterB = createCounter();
+counterA();
+counterA();
+counterA();
+counterB();
+</script>
+
+<h2>コード 5.3.2: 外側変数を共有する2つの関数</h2>
+<script>
+function createPair() {
+  let shared = 0;
+  function increment() {
+    shared++;
+    console.log('[inc] shared =', shared);
+  }
+  function decrement() {
+    shared--;
+    console.log('[dec] shared =', shared);
+  }
+  return { increment, decrement };
+}
+const pair = createPair();
+pair.increment();
+pair.increment();
+pair.decrement();
+</script>
+
+<h2>コード 5.4.1: var ループの落とし穴</h2>
+<script>
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => {
+    console.log('[var] i =', i);
+  }, 100);
+}
+</script>
+
+<h2>コード 5.4.2: let で修正</h2>
+<script>
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => {
+    console.log('[let] i =', i);
+  }, 200);
+}
+</script>
+</body>
+</html>
